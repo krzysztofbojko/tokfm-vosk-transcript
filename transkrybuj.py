@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Transkrypcja strumienia radiowego TOK FM za pomocą Vosk.
-Zapisuje wyniki do /app/output/ (volumen dockera — dane nieulotne).
+Zapisuje wyniki do /app/output/ (volumen dockera).
 """
 
 import subprocess
@@ -19,7 +19,7 @@ STREAM_URL = "https://radiostream.pl/tuba10-1.mp3?dist=gra_www"
 MODEL_PATH = "/app/model"
 OUTPUT_DIR  = Path("/app/output")
 CHUNK_SIZE  = 4000          # bajtów na ramkę (~125ms przy 16kHz/16bit/mono)
-SAMPLE_RATE = 16000         # Vosk wymaga 16000 Hz
+SAMPLE_RATE = 16000       
 
 # ─── ffmpeg ─────────────────────────────────────────────────────
 FFMPEG_CMD = [
@@ -33,7 +33,7 @@ FFMPEG_CMD = [
     "-ac", "1",                       # mono
     "-ar", str(SAMPLE_RATE),          # 16 kHz
     "-f", "s16le",                    # raw PCM bez nagłówka
-    "pipe:1"                          # → stdout
+    "pipe:1"                          #
 ]
 
 # ─── pomocnicze ─────────────────────────────────────────────────
@@ -91,7 +91,7 @@ def main():
                     if czesc:
                         print(f"  → {czesc}", end="\r", flush=True)
 
-                # rotacja pliku co godzinę (sprawdzane leniwie)
+                # rotacja pliku co godzinę
                 plik_wyjściowy()
 
         except KeyboardInterrupt:
@@ -105,8 +105,8 @@ def main():
                 proc.wait()
 
         # restart po awarii streamu
-        print("[reconnect] Ponawiam za 5 sekund...", flush=True)
-        time.sleep(5)
+        print("[reconnect] Ponawiam za 2 sekund...", flush=True)
+        time.sleep(2)
         recognizer.Reset()  # wyczyść stan recognizera
 
 
