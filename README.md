@@ -32,3 +32,12 @@ Transkrypcje zapisywane są w `output/tokfm_RRRR-MM-DD_GG.txt` — jeden plik dz
 ## Strumień
 
 TOK FM: `https://radiostream.pl/tuba10-1.mp3?dist=gra_www`
+
+## Serwis WWW (live)
+
+```bash
+python3 live-server.py
+# → http://localhost:20104
+```
+
+Meta-refresh co 6s, ostatnie 10 linii. Publiczny: http://srv27.mikr.us:20104/
