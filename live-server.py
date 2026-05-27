@@ -46,7 +46,7 @@ h1{{font-size:14px;color:#333;margin-bottom:10px}}
 <body>
 <h1>📻 TOK FM — transkrypcja LIVE (Mikrus)</h1>
 <div class="status">● LIVE</div>
-<div class="info">auto-refresh 3s | {len(lines)} wierszy | {now}</div>
+<div class="info">auto-refresh 6s | {len(lines)} wierszy | {now}</div>
 <div id="log">{rows}</div>
 </body>
 </html>"""
