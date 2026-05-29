@@ -38,7 +38,7 @@ FFMPEG_CMD = [
 
 # ─── pomocnicze ─────────────────────────────────────────────────
 def plik_wyjsciowy() -> Path:
-    """Zwraca ścieżkę do pliku z datą (jeden plik na dobę)."""
+    """Zwraca ścieżkę do pliku z datą (jeden plik dziennie)."""
     teraz = datetime.now()
     nazwa = teraz.strftime("tokfm_%Y-%m-%d.txt")
     return OUTPUT_DIR / nazwa
