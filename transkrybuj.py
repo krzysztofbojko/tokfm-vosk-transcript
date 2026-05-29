@@ -24,7 +24,7 @@ SAMPLE_RATE = 16000
 # ─── ffmpeg ─────────────────────────────────────────────────────
 FFMPEG_CMD = [
     "ffmpeg",
-    "-loglevel", "error",            # ciszej
+    "-loglevel", "error",          
     "-reconnect", "1",               # auto-reconnect dla streamu
     "-reconnect_streamed", "1",
     "-reconnect_delay_max", "10",
@@ -33,7 +33,7 @@ FFMPEG_CMD = [
     "-ac", "1",                       # mono
     "-ar", str(SAMPLE_RATE),          # 16 kHz
     "-f", "s16le",                    # raw PCM bez nagłówka
-    "pipe:1"                          #
+    "pipe:1"                        
 ]
 
 # ─── pomocnicze ─────────────────────────────────────────────────
