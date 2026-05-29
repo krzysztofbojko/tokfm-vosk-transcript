@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Transkrypcja strumienia radiowego TOK FM za pomocą Vosk.
-Zapisuje wyniki do /app/output/ (volumen dockera).
+Zapisuje wyniki do /app/output/ (volumen dockera — dane nieulotne).
 """
 
 import subprocess
@@ -19,7 +19,7 @@ STREAM_URL = "https://radiostream.pl/tuba10-1.mp3?dist=gra_www"
 MODEL_PATH = "/app/model"
 OUTPUT_DIR  = Path("/app/output")
 CHUNK_SIZE  = 4000          # bajtów na ramkę (~125ms przy 16kHz/16bit/mono)
-SAMPLE_RATE = 16000       
+SAMPLE_RATE = 16000         # Vosk wymaga 16000 Hz
 
 # ─── ffmpeg ─────────────────────────────────────────────────────
 FFMPEG_CMD = [
@@ -33,14 +33,14 @@ FFMPEG_CMD = [
     "-ac", "1",                       # mono
     "-ar", str(SAMPLE_RATE),          # 16 kHz
     "-f", "s16le",                    # raw PCM bez nagłówka
-    "pipe:1"                        
+    "pipe:1"                          # → stdout
 ]
 
 # ─── pomocnicze ─────────────────────────────────────────────────
-def plik_wyjściowy() -> Path:
-    """Zwraca ścieżkę do pliku z datą (jeden plik na godzinę)."""
+def plik_wyjsciowy() -> Path:
+    """Zwraca ścieżkę do pliku z datą (jeden plik na dobę)."""
     teraz = datetime.now()
-    nazwa = teraz.strftime("tokfm_%Y-%m-%d_%H.txt")   # plik dzienny
+    nazwa = teraz.strftime("tokfm_%Y-%m-%d.txt")
     return OUTPUT_DIR / nazwa
 
 
@@ -83,7 +83,7 @@ def main():
                     tekst = result.get("text", "").strip()
                     if tekst:
                         print(tekst, flush=True)
-                        zapisz_wiersz(plik_wyjściowy(), tekst)
+                        zapisz_wiersz(plik_wyjsciowy(), tekst)
                 else:
                     # częściowy wynik — tylko wypisz bez zapisu
                     partial = json.loads(recognizer.PartialResult())
@@ -91,8 +91,8 @@ def main():
                     if czesc:
                         print(f"  → {czesc}", end="\r", flush=True)
 
-                # rotacja pliku co godzinę
-                plik_wyjściowy()
+                # rotacja pliku co dobę (sprawdzane leniwie)
+                plik_wyjsciowy()
 
         except KeyboardInterrupt:
             print("\n[stop] Zatrzymanie na żądanie.", flush=True)
@@ -105,8 +105,8 @@ def main():
                 proc.wait()
 
         # restart po awarii streamu
-        print("[reconnect] Ponawiam za 2 sekund...", flush=True)
-        time.sleep(2)
+        print("[reconnect] Ponawiam za 5 sekund...", flush=True)
+        time.sleep(5)
         recognizer.Reset()  # wyczyść stan recognizera
 
 
