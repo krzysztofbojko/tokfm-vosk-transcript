@@ -6,7 +6,7 @@ OUTPUT_DIR = "/root/tokfm-vosk/output"
 PORT = 20104
 
 def last_lines(n=10):
-    files = sorted(glob.glob(os.path.join(OUTPUT_DIR, "tokfm_*.txt")))
+    files = sorted(glob.glob(os.path.join(OUTPUT_DIR, "tokfm_*.txt")), key=os.path.getmtime)
     if not files: return []
     lines = []
     with open(files[-1], "r", encoding="utf-8") as f:
